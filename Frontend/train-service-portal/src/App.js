@@ -7,6 +7,7 @@ import SingleTrain from './components/SingleTrain';
 
 function App() {
   return (
+    <div className='App-header'>
     <div className="App">
       <Router>
         <Switch>
@@ -14,6 +15,7 @@ function App() {
           <Route path="/todo/:id" children={<SingleTrain />} />
         </Switch>
       </Router>
+    </div>
     </div>
   );
 }
