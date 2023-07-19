@@ -67,37 +67,46 @@ const sortTrains = (trains) => {
   });
 
   // Sort trains based on conditions
-  const sortedTrains = filteredTrains.sort((a, b) => {
-    // Sort by price (ascending order)
-    const priceA = a.price.sleeper;
-    const priceB = b.price.sleeper;
-    if (priceA !== priceB) {
-      return priceA - priceB;
-    }
-
-    // Sort by tickets (descending order)
-    const ticketsA = a.seatsAvailable.sleeper;
-    const ticketsB = b.seatsAvailable.sleeper;
-    if (ticketsA !== ticketsB) {
-      return ticketsB - ticketsA;
-    }
-
-    // Sort by departure time (descending order)
-    const departureTimeA = new Date().setHours(
-      a.departureTime.Hours,
-      a.departureTime.Minutes,
-      a.departureTime.Seconds
-    );
-    const departureTimeB = new Date().setHours(
-      b.departureTime.Hours,
-      b.departureTime.Minutes,
-      b.departureTime.Seconds
-    );
-    return departureTimeB - departureTimeA;
-  });
-
-  return sortedTrains;
-};
+  const sortTrains = (trains) => {
+    const filteredTrains = trains.filter((train) => {
+      const currentTimestamp = new Date().getTime();
+      const departureTimestamp = new Date().setHours(
+        train.departureTime.Hours,
+        train.departureTime.Minutes,
+        train.departureTime.Seconds
+      );
+      return departureTimestamp - currentTimestamp > 30 * 60 * 1000;
+    });
+  
+    const sortedTrains = filteredTrains.sort((trainA, trainB) => {
+      const priceA = trainA.price.sleeper;
+      const priceB = trainB.price.sleeper;
+      if (priceA !== priceB) {
+        return priceA - priceB;
+      }
+  
+      const ticketsA = trainA.seatsAvailable.sleeper;
+      const ticketsB = trainB.seatsAvailable.sleeper;
+      if (ticketsA !== ticketsB) {
+        return ticketsB - ticketsA;
+      }
+  
+      const departureTimeA = new Date().setHours(
+        trainA.departureTime.Hours,
+        trainA.departureTime.Minutes,
+        trainA.departureTime.Seconds
+      );
+      const departureTimeB = new Date().setHours(
+        trainB.departureTime.Hours,
+        trainB.departureTime.Minutes,
+        trainB.departureTime.Seconds
+      );
+      return departureTimeB - departureTimeA;
+    });
+  
+    return sortedTrains;
+  };
+  
 
 
 app.get("/", async function (req, res, next) {
@@ -121,6 +130,39 @@ app.get("/", async function (req, res, next) {
     res.status(500).json({ error: "Error fetching train data" });
   }
 });
+
+
+app.get("/:id", async function (req, res, next) {
+  const id = req.params.id;
+
+  const apiUrlWithId = `${apiUrl}/${id}`;
+
+  if (!authToken || Math.floor(Date.now() / 1000) >= tokenExpirationTime) {
+    await generateAccessToken();
+  }
+
+  const headers = {
+    Authorization: `Bearer ${authToken}`,
+  };
+
+  try {
+    const response = await axios.get(apiUrl, { headers });
+    const trains = response.data;
+
+    const train = trains.find((train) => train.trainNumber === id);
+
+    if (!train) {
+      return res.status(404).json({ error: "Train not found" });
+    }
+
+    res.json(train);
+  } catch (error) {
+    console.error("Error fetching train data:", error);
+    res.status(500).json({ error: "Error fetching train data" });
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
