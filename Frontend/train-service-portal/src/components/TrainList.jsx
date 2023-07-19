@@ -33,7 +33,7 @@ const TrainList=()=>
             <div>
       <h1>Train Service Port</h1>
       <div className="table-container">
-        <table className="table table-striped">
+        <Table striped bordered hover>
           <thead>
             <tr>
               <th>Train Name</th>
@@ -60,7 +60,7 @@ const TrainList=()=>
               </tr>
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
     </div>
         ) : (
