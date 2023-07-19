@@ -45,7 +45,8 @@ table, th, td {
 #trains {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  width: 90%;
+  margin: 10px;
 }
 
 #trains td, #trains th {
@@ -58,15 +59,16 @@ table, th, td {
 }
 
 #trains tr:hover {
-  background-color: #ddd;
+  background-color: #d6b6fd;
 }
 
 #trains th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
-  background-color: #04AA6D;
+  text-align: center;
+  background:  #803bec;
   color: white;
+  
 }
 
 h1 {
