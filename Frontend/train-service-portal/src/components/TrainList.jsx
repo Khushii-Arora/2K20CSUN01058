@@ -18,7 +18,7 @@ const TrainList=()=>
 
     async function getTrainData() {
         try {
-          const response = await axios.get(`http://localhost:5000/${id}`);
+          const response = await axios.get(`http://localhost:5000/`);
           const data = response.data;
           setTrainData(data);
         } catch (error) {

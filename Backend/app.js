@@ -67,46 +67,37 @@ const sortTrains = (trains) => {
   });
 
   // Sort trains based on conditions
-  const sortTrains = (trains) => {
-    const filteredTrains = trains.filter((train) => {
-      const currentTimestamp = new Date().getTime();
-      const departureTimestamp = new Date().setHours(
-        train.departureTime.Hours,
-        train.departureTime.Minutes,
-        train.departureTime.Seconds
-      );
-      return departureTimestamp - currentTimestamp > 30 * 60 * 1000;
-    });
-  
-    const sortedTrains = filteredTrains.sort((trainA, trainB) => {
-      const priceA = trainA.price.sleeper;
-      const priceB = trainB.price.sleeper;
-      if (priceA !== priceB) {
-        return priceA - priceB;
-      }
-  
-      const ticketsA = trainA.seatsAvailable.sleeper;
-      const ticketsB = trainB.seatsAvailable.sleeper;
-      if (ticketsA !== ticketsB) {
-        return ticketsB - ticketsA;
-      }
-  
-      const departureTimeA = new Date().setHours(
-        trainA.departureTime.Hours,
-        trainA.departureTime.Minutes,
-        trainA.departureTime.Seconds
-      );
-      const departureTimeB = new Date().setHours(
-        trainB.departureTime.Hours,
-        trainB.departureTime.Minutes,
-        trainB.departureTime.Seconds
-      );
-      return departureTimeB - departureTimeA;
-    });
-  
-    return sortedTrains;
-  };
-  
+  const sortedTrains = filteredTrains.sort((a, b) => {
+    // Sort by price (ascending order)
+    const priceA = a.price.sleeper;
+    const priceB = b.price.sleeper;
+    if (priceA !== priceB) {
+      return priceA - priceB;
+    }
+
+    // Sort by tickets (descending order)
+    const ticketsA = a.seatsAvailable.sleeper;
+    const ticketsB = b.seatsAvailable.sleeper;
+    if (ticketsA !== ticketsB) {
+      return ticketsB - ticketsA;
+    }
+
+    // Sort by departure time (descending order)
+    const departureTimeA = new Date().setHours(
+      a.departureTime.Hours,
+      a.departureTime.Minutes,
+      a.departureTime.Seconds
+    );
+    const departureTimeB = new Date().setHours(
+      b.departureTime.Hours,
+      b.departureTime.Minutes,
+      b.departureTime.Seconds
+    );
+    return departureTimeB - departureTimeA;
+  });
+
+  return sortedTrains;
+};
 
 
 app.get("/", async function (req, res, next) {
