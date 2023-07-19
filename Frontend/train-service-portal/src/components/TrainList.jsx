@@ -33,7 +33,7 @@ const TrainList=()=>
             <div>
       <h1>Train Service Port</h1>
       <div className="table-container">
-        <Table striped bordered hover>
+        <Table striped bordered hover id="trains">
           <thead>
             <tr>
               <th>Train Name</th>
