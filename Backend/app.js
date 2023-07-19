@@ -1,8 +1,9 @@
 const express = require('express')
-var router = express.Router();
+const cors = require('cors');
 const axios = require("axios");
 
 const app = express()
+app.use(cors());
 const port = 5000
 
 const apiUrl = "http://20.244.56.144/train/trains";
@@ -113,7 +114,8 @@ app.get("/", async function (req, res, next) {
 
   try {
     const response = await axios.get(apiUrl, { headers });
-    res.send(response.data);
+    const sortedTrains = sortTrains(response.data);
+    res.json(sortedTrains);
   } catch (error) {
     console.error("Error fetching train data:", error);
     res.status(500).json({ error: "Error fetching train data" });
